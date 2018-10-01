@@ -2,15 +2,20 @@ require 'rest-client'
 require 'json'
 require 'pry'
 
-def get_character_movies_from_api(character)
-  #make the web request
+def all_star_wars_characters
+  # make the web request
   response_string = RestClient.get('http://www.swapi.co/api/people/')
+  # parse data from api
   response_hash = JSON.parse(response_string)
-  # Get all the Star Wars characters
-  characters = response_hash["results"]
+  # Get the array of all the Star Wars characters
+  response_hash["results"]
+end
+
+def get_character_urls(character)
   # Go through all of Star Wars characters[]
   character_films = []
-  characters.each do |star_character|
+
+  all_star_wars_characters.each do |star_character|
     # If star_character is equal to our user's character
     if star_character["name"].downcase == character
       # Assign character_films array to the matching
@@ -19,14 +24,23 @@ def get_character_movies_from_api(character)
       break
     end
   end
+
+  character_films # Return url of character's movies
+end
+
+def get_character_movies_from_api(character)
+
+  # Get this character's movie urls
+  character_films = get_character_urls(character)
+
   films_hash = []
     character_films.each do |url|
       response_string = RestClient.get(url)
       response_hash = JSON.parse(response_string)
       films_hash << response_hash
-
     end
     films_hash
+end
 
 
 
@@ -43,11 +57,11 @@ def get_character_movies_from_api(character)
   # this collection will be the argument given to `parse_character_movies`
   #  and that method will do some nice presentation stuff: puts out a list
   #  of movies by title. play around with puts out other info about a given film.
-end
 
 def print_movies(films_array)
-  films_array.each do |film|
-    puts film["title"]
+  films_array.each_with_index do |film, index|
+    puts "*" * 26
+    puts "#{index + 1} #{film["title"]}"
   end
 
   # some iteration magic and puts out the movies in a nice list
