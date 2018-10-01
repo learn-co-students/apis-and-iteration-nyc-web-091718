@@ -6,8 +6,22 @@ def get_character_movies_from_api(character)
   #make the web request
   response_string = RestClient.get('http://www.swapi.co/api/people/')
   response_hash = JSON.parse(response_string)
-  
-  # NOTE: in this demonstration we name many of the variables _hash or _array. 
+  # Get all the Star Wars characters
+  characters = response_hash["results"]
+  # Go through all of Star Wars characters[]
+  character_films = []
+  characters.each do |star_character|
+    # If star_character is equal to our user's character
+    if star_character["name"] == character
+      # Assign character_films array to the matching
+      # character's array of films.
+      binding.pry
+      character_films = star_character["film"]
+      binding.pry
+    end
+  end
+
+  # NOTE: in this demonstration we name many of the variables _hash or _array.
   # This is done for educational purposes. This is not typically done in code.
 
 
