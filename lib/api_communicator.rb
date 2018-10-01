@@ -11,7 +11,7 @@ def all_star_wars_characters
   response_hash["results"]
 end
 
-def get_character_urls(character)
+def find_character_urls(character)
   # Go through all of Star Wars characters[]
   character_films = []
 
@@ -31,15 +31,15 @@ end
 def get_character_movies_from_api(character)
 
   # Get this character's movie urls
-  character_films = get_character_urls(character)
+  character_film_urls = find_character_urls(character)
 
-  films_hash = []
-    character_films.each do |url|
+  array_of_films = []
+    character_film_urls.each do |url|
       response_string = RestClient.get(url)
       response_hash = JSON.parse(response_string)
-      films_hash << response_hash
+      array_of_films << response_hash
     end
-    films_hash
+    array_of_films
 end
 
 
