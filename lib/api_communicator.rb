@@ -6,29 +6,52 @@ def parser(element)
   JSON.parse(RestClient.get(element))
 end
 
-def films_url(response_hash)
-  films = []
-  response_hash["results"].each {|e|
-    if e["name"].downcase == character.downcase
-      films = e["films"]
-      # binding.pry
+# def films_url(response_hash)
+#   films = []
+#   response_hash["results"].each {|e|
+#     if e["name"].downcase == character.downcase
+#       films = e["films"]
+#       # binding.pry
+#     end
+#   }
+# end
+
+def full_array
+  full_array = []
+  i = 1
+  # url = "http://www.swapi.co/api/people/?page=#{i}"
+  loop do
+    full_array << parser("http://www.swapi.co/api/people/?page=#{i}")
+    i += 1
+    if parser("http://www.swapi.co/api/people/?page=#{i}")["next"] == nil
+      full_array << parser("http://www.swapi.co/api/people/?page=#{i}")
+      break
     end
-  }
+  end
+  full_array
+  # binding.pry
 end
+
 
 def get_character_movies_from_api(character)
   #make the web request
   # response_string = RestClient.get('http://www.swapi.co/api/people/')
   # response_hash = JSON.parse(response_string)
-  response_hash = parser('http://www.swapi.co/api/people/')
+
+  # response_hash = parser('http://www.swapi.co/api/people/?page=1')
+  # binding.pry
+  # i = 1
+  # while response_hash["next"] != nil
+  # response_hash["name"].downcase == character.downcase
   # binding.pry
   films = []
-  response_hash["results"].each {|e|
+
+  full_array.each {|page| page["results"].each {|e|
     if e["name"].downcase == character.downcase
       films = e["films"]
       # binding.pry
     end
-  }
+  }}
 
   # films.each {|film| }
   # NOTE: in this demonstration we name many of the variables _hash or _array.
