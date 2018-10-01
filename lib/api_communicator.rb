@@ -12,14 +12,23 @@ def get_character_movies_from_api(character)
   character_films = []
   characters.each do |star_character|
     # If star_character is equal to our user's character
-    if star_character["name"] == character
+    if star_character["name"].downcase == character
       # Assign character_films array to the matching
       # character's array of films.
-      binding.pry
-      character_films = star_character["film"]
-      binding.pry
+      character_films = star_character["films"]
+      break
     end
   end
+  films_hash = []
+    character_films.each do |url|
+      response_string = RestClient.get(url)
+      response_hash = JSON.parse(response_string)
+      films_hash << response_hash
+
+    end
+    films_hash
+
+
 
   # NOTE: in this demonstration we name many of the variables _hash or _array.
   # This is done for educational purposes. This is not typically done in code.
@@ -36,7 +45,11 @@ def get_character_movies_from_api(character)
   #  of movies by title. play around with puts out other info about a given film.
 end
 
-def print_movies(films_hash)
+def print_movies(films_array)
+  films_array.each do |film|
+    puts film["title"]
+  end
+
   # some iteration magic and puts out the movies in a nice list
 end
 
