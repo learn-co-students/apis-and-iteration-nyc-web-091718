@@ -6,9 +6,16 @@ def get_character_movies_from_api(character)
   #make the web request
   response_string = RestClient.get('http://www.swapi.co/api/people/')
   response_hash = JSON.parse(response_string)
-  
-  # NOTE: in this demonstration we name many of the variables _hash or _array. 
+
+  # NOTE: in this demonstration we name many of the variables _hash or _array.
   # This is done for educational purposes. This is not typically done in code.
+
+  found_character = response_hash["results"].find do |person|
+    person["name"].downcase == character
+  end
+
+  found_character["films"]
+
 
 
   # iterate over the response hash to find the collection of `films` for the given
@@ -22,13 +29,26 @@ def get_character_movies_from_api(character)
   #  of movies by title. play around with puts out other info about a given film.
 end
 
-def print_movies(films_hash)
+def get_movies_from_api(array_of_movies)
+  movie_titles = array_of_movies.map do |url|
+    response_string = RestClient.get(url)
+    response_hash = JSON.parse(response_string)
+    response_hash["title"]
+  end
+end
+
+def print_movies(films_array)
+  films_array.each do
+    |film| puts film
+  end
   # some iteration magic and puts out the movies in a nice list
 end
 
 def show_character_movies(character)
   films_array = get_character_movies_from_api(character)
-  print_movies(films_array)
+  film_title_array = get_movies_from_api(films_array)
+  binding.pry
+  print_movies(film_title_array)
 end
 
 ## BONUS
