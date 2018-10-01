@@ -35,24 +35,23 @@ def get_character_movies_from_api(character)
 end
 
 def print_movies(films_hash)
-
   if films_hash != nil
     films_hash.each do |f|
       puts "*" * 25
       puts f["title"]
     end
-
+    
   else
     puts "Please enter a valid name"
   end
-  films_hash
+
   # some iteration magic and puts out the movies in a nice list
 # binding.pry
 end
 
 def show_character_movies(character)
   films_array = get_character_movies_from_api(character)
-
+  print_movies(films_array)
 end
 
 ## BONUS
